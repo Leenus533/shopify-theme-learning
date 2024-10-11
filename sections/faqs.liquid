@@ -1,0 +1,83 @@
+<div class="accordion-sub-container">
+  {% for allGroups in shop.metaobjects.faq_groups.values %}
+    <br>
+    {% assign name = allGroups.name | handleize %}
+    {{ name }}
+    {{ allGroups | json }}
+    {% for groupQuestion in shop.metaobjects.faq_groups[name].faq.value %}
+      {{ groupQuestion.question }}
+      : {{ groupQuestion.answer }}
+    {% endfor %}
+  {% endfor %}
+</div>
+
+<style>
+  .modal-button {
+    height: 60px;
+    width: 60px;
+    color: red;
+    border-radius: 100%;
+    position: fixed;
+    bottom: 10px;
+    left: 20px;
+    background-color: black;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  .modal {
+    display: none;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 20px;
+    position: fixed;
+    height: 90vh;
+    width: 60vw;
+    background-color: #f3f3f3;
+    top: 5vh;
+    left: 20vw;
+    z-index: 10;
+  }
+</style>
+
+<h3 class="">Frequently asked Questions</h3>
+
+<button onclick="buttonClick()" class="modal-button">hi</button>
+
+<div class="modal">
+  <h1>Featured collections</h1>
+</div>
+
+<script>
+  let isOpen = false;
+  const modalEle = document.querySelector('.modal');
+
+  const buttonClick = async () => {
+    isOpen = !isOpen;
+
+    if (isOpen) {
+      const res = await fetch('?section_id=template--23631816851787__featured_collection');
+      const resText = await res.text();
+      modalEle.innerHTML = resText;
+    }
+    modalEle.style.display = isOpen ? 'block' : 'none';
+  };
+</script>
+
+{% schema %}
+{
+  "name": "faqs",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "faqs",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
